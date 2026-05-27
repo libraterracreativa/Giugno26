@@ -306,70 +306,99 @@ img{max-width:100%;display:block;}
   max-width:420px;line-height:1.5;
 }
 
+/* ============ HIGHLIGHTS — STILE EDITORIALE ============ */
 .highlights-grid{
-  max-width:1240px;margin:0 auto;
+  max-width:1280px;margin:0 auto;
   display:grid;
   grid-template-columns:repeat(12,1fr);
-  gap:18px;
+  grid-auto-rows:minmax(220px, auto);
+  gap:14px;
 }
 .hi-card{
-  background:var(--peach-soft);
-  border-radius:18px;padding:28px;
   position:relative;overflow:hidden;
-  border:1px solid var(--line);
-  transition:all .35s cubic-bezier(.2,.7,.3,1);
-  display:flex;flex-direction:column;justify-content:space-between;
-  min-height:280px;
+  border-radius:14px;
   text-decoration:none;color:inherit;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:24px;
+  transition:transform .4s cubic-bezier(.2,.7,.3,1), box-shadow .4s ease;
+  isolation:isolate;
 }
-.hi-card:hover{
-  transform:translateY(-4px);
-  box-shadow:var(--shadow-md);
-  border-color:rgba(200,72,58,0.30);
+.hi-card:hover{transform:translateY(-3px); box-shadow:var(--shadow-lg);}
+/* Le card con foto: layer immagine + overlay scuro per leggibilità */
+.hi-card.with-photo::before{
+  content:'';position:absolute;inset:0;z-index:-2;
+  background-image:var(--photo);
+  background-size:cover;background-position:center;
+  transition:transform .8s cubic-bezier(.2,.7,.3,1);
 }
-.hi-card::after{
-  content:'→';position:absolute;
-  top:24px;right:24px;
-  width:36px;height:36px;border-radius:50%;
-  background:var(--ink);color:var(--peach);
-  display:grid;place-items:center;
-  font-size:16px;
-  transition:transform .25s ease;
+.hi-card.with-photo:hover::before{transform:scale(1.05);}
+.hi-card.with-photo::after{
+  content:'';position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(180deg, rgba(46,34,24,0.05) 0%, rgba(46,34,24,0.35) 55%, rgba(46,34,24,0.85) 100%);
 }
-.hi-card:hover::after{transform:rotate(-45deg) scale(1.08);}
-.hi-card.lg{grid-column:span 7;background:var(--rust);color:var(--cream);min-height:340px;}
-.hi-card.lg .hi-cat,.hi-card.lg .hi-meta{color:rgba(250,241,225,0.75);}
-.hi-card.lg::after{background:var(--cream);color:var(--rust);}
-.hi-card.md{grid-column:span 5;background:var(--magenta);color:var(--cream);}
-.hi-card.md .hi-cat,.hi-card.md .hi-meta{color:rgba(250,241,225,0.78);}
-.hi-card.md::after{background:var(--cream);color:var(--magenta);}
-.hi-card.sm{grid-column:span 4;}
+.hi-card.with-photo{color:var(--cream); min-height:360px;}
+.hi-card.with-photo .hi-cat{color:rgba(252,246,214,0.85);}
+.hi-card.with-photo .hi-meta{color:rgba(252,246,214,0.78);}
+.hi-card.with-photo .hi-instructor{color:rgba(252,246,214,0.9);}
+/* Card piene di colore senza foto */
+.hi-card.solid{padding:32px; min-height:300px; justify-content:space-between;}
+.hi-card.solid.tone-rust{background:var(--rust); color:var(--cream);}
+.hi-card.solid.tone-rust .hi-cat{color:rgba(252,246,214,0.8);}
+.hi-card.solid.tone-rust .hi-meta{color:rgba(252,246,214,0.75);}
+.hi-card.solid.tone-ink{background:var(--ink); color:var(--cream);}
+.hi-card.solid.tone-ink .hi-cat{color:var(--peach-deep);}
+.hi-card.solid.tone-ink .hi-meta{color:rgba(252,246,214,0.7);}
+.hi-card.solid.tone-cream{background:var(--cream); color:var(--ink); border:1px solid var(--line);}
+/* Layout asimmetrico: 5 card su griglia 12 */
+.hi-card.size-hero{grid-column:span 8; grid-row:span 2; min-height:500px;}
+.hi-card.size-tall{grid-column:span 4; grid-row:span 2; min-height:500px;}
+.hi-card.size-wide{grid-column:span 8;}
+.hi-card.size-half{grid-column:span 4;}
+.hi-card.size-third{grid-column:span 4;}
 @media (max-width:900px){
-  .hi-card.lg,.hi-card.md{grid-column:span 12;}
-  .hi-card.sm{grid-column:span 6;}
+  .hi-card.size-hero,.hi-card.size-tall{grid-column:span 12; grid-row:auto; min-height:360px;}
+  .hi-card.size-wide{grid-column:span 12;}
+  .hi-card.size-half,.hi-card.size-third{grid-column:span 6; min-height:260px;}
 }
 @media (max-width:560px){
-  .hi-card.sm{grid-column:span 12;}
+  .hi-card.size-half,.hi-card.size-third{grid-column:span 12;}
 }
+/* Freccia di azione */
+.hi-arrow{
+  position:absolute;top:22px;right:22px;
+  width:42px;height:42px;border-radius:50%;
+  background:var(--cream);color:var(--ink);
+  display:grid;place-items:center;
+  font-size:18px;
+  transition:transform .3s ease, background .3s ease;
+  z-index:2;
+}
+.hi-card:hover .hi-arrow{transform:rotate(-45deg); background:var(--rust); color:var(--cream);}
+.hi-card.with-photo .hi-arrow{background:rgba(252,246,214,0.95);}
+
 .hi-cat{
-  font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
-  color:var(--rust);font-weight:600;margin-bottom:14px;
+  font-size:10px;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--rust);font-weight:700;margin-bottom:14px;
+  display:inline-flex;align-items:center;gap:8px;
 }
+.hi-cat::before{content:'';width:18px;height:1px;background:currentColor;opacity:0.6;}
 .hi-title{
   font-family:'Fraunces',serif;
-  font-size:1.6rem;font-weight:500;line-height:1.15;
-  letter-spacing:-0.01em;margin-bottom:8px;
+  font-size:1.65rem;font-weight:500;line-height:1.12;
+  letter-spacing:-0.015em;margin-bottom:6px;
 }
-.hi-card.lg .hi-title{font-size:2.2rem;}
+.hi-card.size-hero .hi-title{font-size:2.6rem; line-height:1.05;}
+.hi-card.size-hero .hi-title em{font-style:italic;}
+.hi-card.size-tall .hi-title{font-size:1.9rem;}
 .hi-meta{
   font-size:13px;color:var(--ink-soft);
-  margin-top:auto;padding-top:20px;
-  display:flex;flex-direction:column;gap:4px;
+  margin-top:18px;
+  display:flex;flex-direction:column;gap:3px;
 }
-.hi-meta b{color:inherit;font-weight:600;}
+.hi-meta b{color:inherit;font-weight:700;}
 .hi-instructor{
   font-style:italic;font-family:'Fraunces',serif;
-  font-size:.95rem;opacity:0.85;
+  font-size:1rem;opacity:0.95;margin-bottom:4px;
 }
 
 /* ============ FILTER BAR ============ */
@@ -431,12 +460,32 @@ img{max-width:100%;display:block;}
   top:0;left:0;height:3px;width:100%;
   background:var(--sage-soft);
   transition:height .25s ease;
+  z-index:2;
 }
 .event-card.cat-wellness::before{background:var(--sage-soft);}
 .event-card.cat-creativita::before{background:var(--magenta);}
 .event-card.cat-educazione::before{background:var(--gold);}
 .event-card.cat-food::before{background:var(--rust);}
 .event-card:hover::before{height:5px;}
+
+/* Variante con foto piena come header */
+.event-card.has-photo{padding-top:0;}
+.ec-photo{
+  display:block;
+  width:calc(100% + 48px);
+  margin:0 -24px 22px;
+  aspect-ratio:16/9;
+  background-size:cover;
+  background-position:center;
+  background-color:var(--peach-soft);
+  transition:transform .6s cubic-bezier(.2,.7,.3,1);
+  position:relative;
+}
+.ec-photo::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg, transparent 70%, rgba(46,34,24,0.12));
+}
+.event-card.has-photo:hover .ec-photo{transform:scale(1.04);}
 
 .ec-top{
   display:flex;justify-content:space-between;align-items:flex-start;
@@ -513,7 +562,9 @@ img{max-width:100%;display:block;}
   position:absolute;top:14px;right:14px;
   background:var(--magenta);color:var(--cream);
   font-size:9px;letter-spacing:0.15em;text-transform:uppercase;
-  padding:4px 10px;border-radius:20px;font-weight:700;
+  padding:5px 10px;border-radius:20px;font-weight:700;
+  z-index:3;
+  box-shadow:0 4px 10px rgba(46,34,24,0.18);
 }
 
 /* ============ DOMENICA CREATIVA ============ */
@@ -1207,74 +1258,82 @@ section[id]{scroll-margin-top:80px;}
 <section class="highlights" id="evidenza">
   <div class="section-head">
     <div class="section-head-text">
-      <span class="section-label">In evidenza · Imperdibili</span>
+      <span class="section-label">Pagina I · In evidenza</span>
       <h2 class="section-title">Le esperienze<br>da non perdere a <em>giugno</em></h2>
     </div>
     <p class="section-sub">Selezione redazionale degli eventi più richiesti del mese. Posti limitati, ti consigliamo di scrivere appena puoi.</p>
   </div>
 
   <div class="highlights-grid">
-    <a class="hi-card lg" href="https://wa.me/393491408666?text=Ciao%20Libra%21%20Vorrei%20info%2C%20costi%20e%20prenotazione%20per%20il%20retreat%20L%27essenza%20che%20suona%20del%2020%20giugno.%20Grazie%21" target="_blank" rel="noopener">
+
+    <!-- HERO: foto grande + L'essenza che suona -->
+    <a class="hi-card with-photo size-hero" style="--photo:url('assets/yoga-savasana-grande.jpg');" href="https://wa.me/393491408666?text=Ciao%20Libra%21%20Vorrei%20info%2C%20costi%20e%20prenotazione%20per%20il%20retreat%20L%27essenza%20che%20suona%20del%2020%20giugno.%20Grazie%21" target="_blank" rel="noopener">
+      <span class="hi-arrow">→</span>
       <div>
-        <div class="hi-cat" style="color:rgba(252,246,214,0.85);">Wellness · Full day retreat</div>
-        <h3 class="hi-title">L'essenza che suona</h3>
+        <div class="hi-cat">Wellness · Full day retreat</div>
+        <h3 class="hi-title">L'<em>essenza</em> che suona</h3>
         <p class="hi-instructor">con Andrea Parigi · Cantore dell'Anima</p>
-      </div>
-      <div class="hi-meta">
-        <span><b>Sabato 20 Giugno</b> · 10.00–18.00</span>
-        <span style="margin-top:6px;">Suono dell'Anima, Respiro Cristico, Ghematria del Nome di Yeshua. Break food inclusi · posti limitati.</span>
+        <div class="hi-meta">
+          <span><b>Sabato 20 Giugno</b> · 10.00–18.00</span>
+          <span>Suono dell'Anima · Respiro Cristico · Ghematria del Nome di Yeshua. Break food inclusi, posti limitati.</span>
+        </div>
       </div>
     </a>
 
-    <a class="hi-card md" href="https://wa.me/393491408666?text=Ciao%20Libra%21%20Vorrei%20info%2C%20costi%20e%20prenotazione%20per%20il%20Wim%20Hof%20Method%20del%2021%20giugno.%20Grazie%21" target="_blank" rel="noopener">
+    <!-- TALL: foto verticale Wim Hof -->
+    <a class="hi-card with-photo size-tall" style="--photo:url('assets/yoga-savasana.jpg');" href="https://wa.me/393491408666?text=Ciao%20Libra%21%20Vorrei%20info%2C%20costi%20e%20prenotazione%20per%20il%20Wim%20Hof%20Method%20del%2021%20giugno.%20Grazie%21" target="_blank" rel="noopener">
+      <span class="hi-arrow">→</span>
       <div>
-        <div class="hi-cat" style="color:rgba(252,246,214,0.85);">Wellness · Esperienza intensiva</div>
+        <div class="hi-cat">Esperienza intensiva</div>
         <h3 class="hi-title">Wim Hof Method</h3>
-        <p class="hi-instructor">con Andrea Bianchi (WHM Certified)</p>
-      </div>
-      <div class="hi-meta">
-        <span><b>Domenica 21 Giugno</b> · 9.00–15.00</span>
-        <span style="margin-top:6px;">Respiro, esposizione al freddo, mindset. Libera il tuo fuoco interiore. Posti limitati.</span>
+        <p class="hi-instructor">con Andrea Bianchi · WHM Certified</p>
+        <div class="hi-meta">
+          <span><b>Domenica 21 Giugno</b> · 9.00–15.00</span>
+          <span>Respiro, freddo, mindset. Libera il tuo fuoco interiore.</span>
+        </div>
       </div>
     </a>
 
-    <a class="hi-card sm" href="https://wa.me/393491408666?text=Ciao%20Libra%21%20Vorrei%20info%2C%20costi%20e%20prenotazione%20per%20la%20Domenica%20Creativa%20del%207%20giugno.%20Grazie%21" target="_blank" rel="noopener">
+    <!-- WIDE solid scuro: Domenica Creativa -->
+    <a class="hi-card solid tone-ink size-wide" href="https://wa.me/393491408666?text=Ciao%20Libra%21%20Vorrei%20info%2C%20costi%20e%20prenotazione%20per%20la%20Domenica%20Creativa%20del%207%20giugno.%20Grazie%21" target="_blank" rel="noopener">
+      <span class="hi-arrow">→</span>
       <div>
         <div class="hi-cat">Creatività · Giornata intera</div>
-        <h3 class="hi-title">Domenica Creativa</h3>
-        <p class="hi-instructor">5 attività · 1 giorno</p>
+        <h3 class="hi-title">Domenica <em>Creativa</em></h3>
+        <p class="hi-instructor">5 laboratori · per grandi e piccoli</p>
       </div>
       <div class="hi-meta">
         <span><b>Domenica 7 Giugno</b> · 11.00–17.30</span>
-        <span style="margin-top:6px;">Arte per bambini, sound healing, cianotipo floreale, ceramica, brunch &amp; musica live.</span>
+        <span>Arte per bambini, sound healing, cianotipo floreale, ceramica, brunch &amp; musica live.</span>
       </div>
     </a>
 
-    <a class="hi-card sm" href="https://wa.me/393491408666?text=Ciao%20Libra%21%20Vorrei%20info%2C%20costi%20e%20prenotazione%20per%20la%20Cena%20Thai%20di%20Igor%20Cau%20del%206%20giugno.%20Grazie%21" target="_blank" rel="noopener">
+    <!-- HALF foto: Thailandia di Igor Cau -->
+    <a class="hi-card with-photo size-half" style="--photo:url('assets/piatto-zucca.jpg');" href="https://wa.me/393491408666?text=Ciao%20Libra%21%20Vorrei%20info%2C%20costi%20e%20prenotazione%20per%20la%20Cena%20Thai%20di%20Igor%20Cau%20del%206%20giugno.%20Grazie%21" target="_blank" rel="noopener">
+      <span class="hi-arrow">→</span>
       <div>
-        <div class="hi-cat">Food &amp; Drink · Cucina d'autore</div>
+        <div class="hi-cat">Cucina d'autore</div>
         <h3 class="hi-title">La Thailandia di Igor Cau</h3>
-        <p class="hi-instructor">cena thai &amp; corso di cucina</p>
-      </div>
-      <div class="hi-meta">
-        <span><b>Cena</b> · Sab 6 · 18.30–22.30</span>
-        <span><b>Corso + apericena</b> · Dom 28 · 16.00–19.00</span>
-        <span style="margin-top:6px;">Pad thai, spring rolls, curry. 100% vegetale, posti limitati.</span>
+        <div class="hi-meta">
+          <span><b>Sab 6</b> · Cena Thai · 18.30</span>
+          <span><b>Dom 28</b> · Corso + apericena · 16.00</span>
+        </div>
       </div>
     </a>
 
-    <a class="hi-card sm" href="https://wa.me/393491408666?text=Ciao%20Libra%21%20Vorrei%20info%2C%20costi%20e%20prenotazione%20per%20The%20Heart%20of%20Pizza%20del%2020-21%20giugno.%20Grazie%21" target="_blank" rel="noopener">
+    <!-- THIRD foto: The Heart of Pizza -->
+    <a class="hi-card with-photo size-third" style="--photo:url('assets/cena-serale.jpg');" href="https://wa.me/393491408666?text=Ciao%20Libra%21%20Vorrei%20info%2C%20costi%20e%20prenotazione%20per%20The%20Heart%20of%20Pizza%20del%2020-21%20giugno.%20Grazie%21" target="_blank" rel="noopener">
+      <span class="hi-arrow">→</span>
       <div>
-        <div class="hi-cat">Food &amp; Drink · Lievito madre</div>
+        <div class="hi-cat">Lievito madre</div>
         <h3 class="hi-title">The Heart of Pizza</h3>
-        <p class="hi-instructor">con Andrea Danelli</p>
-      </div>
-      <div class="hi-meta">
-        <span><b>Pizza Night</b> · Sab 20 · dalle 20.00</span>
-        <span><b>Workshop</b> · Dom 21 · 16.00–18.00</span>
-        <span style="margin-top:6px;">Menù degustazione gourmet e laboratorio sull'impasto a fermentazione naturale.</span>
+        <div class="hi-meta">
+          <span><b>Sab 20</b> · Pizza Night · 20.00</span>
+          <span><b>Dom 21</b> · Workshop · 16.00</span>
+        </div>
       </div>
     </a>
+
   </div>
 </section>
 
@@ -1283,7 +1342,7 @@ section[id]{scroll-margin-top:80px;}
   <div class="events-inner">
     <div class="section-head">
       <div class="section-head-text">
-        <span class="section-label">Calendario · Giugno 2026</span>
+        <span class="section-label">Pagina II · Calendario Giugno 2026</span>
         <h2 class="section-title">Tutti gli <em>eventi</em> del mese</h2>
       </div>
       <p class="section-sub">Filtra per categoria. Per costi, disponibilità e prenotazione, scrivici su WhatsApp dal pulsante di ogni scheda.</p>
@@ -1301,7 +1360,8 @@ section[id]{scroll-margin-top:80px;}
     <div class="events-grid" id="eventsGrid">
 
       <!-- Anāhata Heart Chakra Awakening -->
-      <div class="event-card cat-wellness">
+      <div class="event-card cat-wellness has-photo">
+        <span class="ec-photo" style="background-image:url('assets/yoga-meditazione.jpg');"></span>
         <div class="ec-top">
           <div class="ec-date">Lun 1<small>Giugno</small></div>
           <span class="ec-cat">Wellness</span>
@@ -1317,7 +1377,8 @@ section[id]{scroll-margin-top:80px;}
       </div>
 
       <!-- Bagno di suono -->
-      <div class="event-card cat-wellness">
+      <div class="event-card cat-wellness has-photo">
+        <span class="ec-photo" style="background-image:url('assets/yoga-pratica.jpg');"></span>
         <div class="ec-top">
           <div class="ec-date">Ven 5<small>Giugno</small></div>
           <span class="ec-cat">Wellness</span>
@@ -1349,7 +1410,8 @@ section[id]{scroll-margin-top:80px;}
       </div>
 
       <!-- Cena Thai -->
-      <div class="event-card cat-food">
+      <div class="event-card cat-food has-photo">
+        <span class="ec-photo" style="background-image:url('assets/piatto-barbabietola.jpg');"></span>
         <div class="ec-top">
           <div class="ec-date">Sab 6<small>Giugno</small></div>
           <span class="ec-cat">Food &amp; Drink</span>
@@ -1365,7 +1427,8 @@ section[id]{scroll-margin-top:80px;}
       </div>
 
       <!-- Domenica Creativa -->
-      <div class="event-card cat-creativita feat">
+      <div class="event-card cat-creativita feat has-photo">
+        <span class="ec-photo" style="background-image:url('assets/atelier-creativo.jpg');"></span>
         <span class="feat-tag">Giornata intera</span>
         <div class="ec-top">
           <div class="ec-date">Dom 7<small>Giugno</small></div>
@@ -1382,7 +1445,8 @@ section[id]{scroll-margin-top:80px;}
       </div>
 
       <!-- Disegno dal vero -->
-      <div class="event-card cat-creativita">
+      <div class="event-card cat-creativita has-photo">
+        <span class="ec-photo" style="background-image:url('assets/croissant-closeup.jpg');"></span>
         <div class="ec-top">
           <div class="ec-date">Sab 13<small>Giugno</small></div>
           <span class="ec-cat">Creatività</span>
@@ -1398,7 +1462,8 @@ section[id]{scroll-margin-top:80px;}
       </div>
 
       <!-- Workshop Svezzamento -->
-      <div class="event-card cat-educazione feat">
+      <div class="event-card cat-educazione feat has-photo">
+        <span class="ec-photo" style="background-image:url('assets/tavola-acetosa.jpg');"></span>
         <span class="feat-tag">Workshop</span>
         <div class="ec-top">
           <div class="ec-date">Gio 18<small>Giugno</small></div>
@@ -1431,7 +1496,9 @@ section[id]{scroll-margin-top:80px;}
       </div>
 
       <!-- L'essenza che suona -->
-      <div class="event-card cat-wellness feat">
+      <div class="event-card cat-wellness feat has-photo has-photo">
+        <span class="ec-photo" style="background-image:url('assets/croissants-libra.jpg');"></span>
+        <span class="ec-photo" style="background-image:url('assets/yoga-savasana.jpg');"></span>
         <span class="feat-tag">Full day retreat</span>
         <div class="ec-top">
           <div class="ec-date">Sab 20<small>Giugno</small></div>
@@ -1465,7 +1532,8 @@ section[id]{scroll-margin-top:80px;}
       </div>
 
       <!-- Pizza Night -->
-      <div class="event-card cat-food">
+      <div class="event-card cat-food has-photo">
+        <span class="ec-photo" style="background-image:url('assets/focacce-sera.jpg');"></span>
         <div class="ec-top">
           <div class="ec-date">Sab 20<small>Giugno</small></div>
           <span class="ec-cat">Food &amp; Drink</span>
@@ -1481,7 +1549,8 @@ section[id]{scroll-margin-top:80px;}
       </div>
 
       <!-- Wim Hof Method -->
-      <div class="event-card cat-wellness feat">
+      <div class="event-card cat-wellness feat has-photo">
+        <span class="ec-photo" style="background-image:url('assets/yoga-savasana-grande.jpg');"></span>
         <span class="feat-tag">Intensivo</span>
         <div class="ec-top">
           <div class="ec-date">Dom 21<small>Giugno</small></div>
@@ -1498,7 +1567,8 @@ section[id]{scroll-margin-top:80px;}
       </div>
 
       <!-- Workshop Pizza e Lievito Madre -->
-      <div class="event-card cat-food">
+      <div class="event-card cat-food has-photo">
+        <span class="ec-photo" style="background-image:url('assets/menu-libra.jpg');"></span>
         <div class="ec-top">
           <div class="ec-date">Dom 21<small>Giugno</small></div>
           <span class="ec-cat">Food &amp; Drink</span>
@@ -1514,7 +1584,8 @@ section[id]{scroll-margin-top:80px;}
       </div>
 
       <!-- Yoga e Bagno Sonoro -->
-      <div class="event-card cat-wellness">
+      <div class="event-card cat-wellness has-photo">
+        <span class="ec-photo" style="background-image:url('assets/piatto-zucca.jpg');"></span>
         <div class="ec-top">
           <div class="ec-date">Sab 27<small>Giugno</small></div>
           <span class="ec-cat">Wellness</span>
@@ -1530,7 +1601,8 @@ section[id]{scroll-margin-top:80px;}
       </div>
 
       <!-- Yoga Family -->
-      <div class="event-card cat-wellness">
+      <div class="event-card cat-wellness has-photo">
+        <span class="ec-photo" style="background-image:url('assets/cena-serale.jpg');"></span>
         <div class="ec-top">
           <div class="ec-date">Sab 27<small>Giugno</small></div>
           <span class="ec-cat">Wellness</span>
@@ -1626,7 +1698,7 @@ section[id]{scroll-margin-top:80px;}
 <section class="magazine-section" id="rivista">
   <div class="section-head" style="margin-bottom:40px;">
     <div class="section-head-text">
-      <span class="section-label">Librazine n.7 · Giugno 2026</span>
+      <span class="section-label">Pagina III · Librazine n.7</span>
       <h2 class="section-title">Sfoglia la <em>rivista</em></h2>
     </div>
     <p class="section-sub">Tutta la rivista del mese in versione interattiva. Usa frecce, tastiera, swipe o le miniature per navigare.</p>
@@ -1661,7 +1733,7 @@ section[id]{scroll-margin-top:80px;}
 <section class="weekly-section" id="fissi">
   <div class="section-head" style="max-width:1240px;margin:0 auto 40px;">
     <div class="section-head-text">
-      <span class="section-label">Tutte le settimane · Su prenotazione</span>
+      <span class="section-label">Pagina IV · Tutte le settimane</span>
       <h2 class="section-title">Appuntamenti <em>fissi</em></h2>
     </div>
     <p class="section-sub">Le pratiche ricorrenti che trovi ogni settimana da Libra. Partecipazione anche al singolo incontro.</p>
